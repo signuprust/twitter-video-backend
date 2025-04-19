@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2016",                      // ES6 → ES2016 이상으로 변경 (includes 지원)
+    "lib": ["ES2016"],                       // includes, Promise 등 최신 기능 사용 가능
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "moduleResolution": "node",              // node_modules 경로 해결을 위한 설정
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true                     // 타입 충돌 무시 (optional)
+  },
+  "include": ["src"]
 }
