@@ -9,9 +9,12 @@ services:
         value: production
       - key: PORT
         value: 3003
+      - key: FRONTEND_URL
+        value: https://twitter-video-downloader-zfb9.vercel.app
     buildFilter:
       paths:
         - package.json
         - package-lock.json
         - tsconfig.json
-        - src/** 
+        - src/**
+        - scripts/** 

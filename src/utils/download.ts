@@ -1,6 +1,24 @@
 import { exec } from 'child_process';
 import { ALLOWED_FORMATS } from '../config';
 import { VideoFormat } from '../types';
+import path from 'path';
+import fs from 'fs';
+
+/**
+ * yt-dlp 경로 가져오기
+ */
+const getYtDlpPath = (): string => {
+  // 배포 환경에서는 프로젝트 루트의 bin 디렉토리에 설치된 yt-dlp 사용
+  const customPath = path.join(process.cwd(), 'bin', 'yt-dlp');
+  
+  // 커스텀 경로에 파일이 있는지 확인
+  if (fs.existsSync(customPath)) {
+    return customPath;
+  }
+  
+  // 없으면 전역 설치된 yt-dlp 사용
+  return 'yt-dlp';
+};
 
 /**
  * 주어진 포맷이 허용된 포맷인지 확인하는 함수
@@ -18,7 +36,10 @@ export const buildYtDlpCommand = (url: string, format?: string): string => {
     ? `-f "bestvideo[ext=${format}]+bestaudio[ext=m4a]/best[ext=${format}]/best"`
     : '-f best';
 
-  return `yt-dlp -g ${formatOption} "${url}"`;
+  const ytDlpPath = getYtDlpPath();
+  console.log(`Using yt-dlp from: ${ytDlpPath}`);
+  
+  return `${ytDlpPath} -g ${formatOption} "${url}"`;
 };
 
 /**
@@ -26,6 +47,8 @@ export const buildYtDlpCommand = (url: string, format?: string): string => {
  */
 export const executeYtDlp = (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
+    console.log(`Executing command: ${command}`);
+    
     exec(command, (error: Error | null, stdout: string, stderr: string) => {
       if (error) {
         console.error('yt-dlp 실행 중 에러:', stderr);
