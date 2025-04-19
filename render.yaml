@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: twitter-video-backend
+    runtime: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3003
+    buildFilter:
+      paths:
+        - package.json
+        - package-lock.json
+        - tsconfig.json
+        - src/** 
